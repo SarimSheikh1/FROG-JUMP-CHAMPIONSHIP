@@ -279,11 +279,11 @@ const MathUtils = {
 
 // --- GAME CONFIG ---
 const CONFIG = {
-    gravity: 0.3,
+    gravity: 0.2, // slower fall
     terminalVelocity: 10,
-    baseJumpForce: -9,
-    maxJumpForce: -18,
-    chargeTimeMs: 800,
+    baseJumpForce: -10, // higher base jump
+    maxJumpForce: -20, // higher max jump
+    chargeTimeMs: 600, // faster charge
     cameraSpeed: 2,
     platformHeight: 16,
     frogSize: 32,
@@ -889,11 +889,11 @@ const Game = {
     },
 
     generateChunk() {
-        // Reduced gap distance
-        const gap = MathUtils.randInt(50, 100);
+        // Reduced gap distance for easier play
+        const gap = MathUtils.randInt(40, 80);
         let y = this.highestPlatformY - gap;
-        // Increased platform width
-        let w = MathUtils.randInt(120, 250);
+        // Increased platform width for easier landings
+        let w = MathUtils.randInt(150, 300);
         let x = MathUtils.randInt(20, this.w - w - 20);
         
         let theme = THEMES[this.selectedThemeId];
@@ -1011,13 +1011,13 @@ const Game = {
         }
 
         // Cleanup Offscreen (increased threshold)
-        this.platforms = this.platforms.filter(p => p.y < this.cameraY + this.h + 500);
-        this.flies = this.flies.filter(f => f.y < this.cameraY + this.h + 500 && f.active);
+        this.platforms = this.platforms.filter(p => p.y < this.cameraY + this.h + 800);
+        this.flies = this.flies.filter(f => f.y < this.cameraY + this.h + 800 && f.active);
 
         // Death conditions
         for(let f of this.frogs) {
             // Give players more room to fall below the camera before dying
-            if (!f.dead && f.y > this.cameraY + this.h + 400) {
+            if (!f.dead && f.y > this.cameraY + this.h + 700) {
                 f.dead = true;
                 this.particles.spawn(f.x + f.width/2, this.cameraY + this.h, 20, f.type.color);
                 if (!f.isAI) AudioSys.splash();
